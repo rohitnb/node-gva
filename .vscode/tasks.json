@@ -63,7 +63,7 @@
         {
             "label": "ZS-001 Zip Slip Exploit",
             "type": "shell",
-            "command": "curl -X POST http://localhost:3001/import -F 'importFile=@/workspaces/node-gva/exploits/demo/01-adm-zip-slip/malicious_workspace.zip'"
+            "command": "curl -X POST http://localhost:3001/import -F 'importFile=@exploits/demo/01-adm-zip-slip/exploit_about.zip'"
         }
     ]
 }
